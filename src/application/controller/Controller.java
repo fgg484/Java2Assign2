@@ -35,7 +35,10 @@ public class Controller implements Initializable {
             int x = (int) (event.getX() / BOUND);
             int y = (int) (event.getY() / BOUND);
             if (refreshBoard(x, y)) {
-                TURN = !TURN;
+                //TODO: receive turn to the server
+
+                TURN = !TURN;//Turn = msg from the server
+                //TODO: send turn to the server
             }
         });
     }
@@ -43,6 +46,8 @@ public class Controller implements Initializable {
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY) {
             chessBoard[x][y] = TURN ? PLAY_1 : PLAY_2;
+            //TODO: send msg to the server
+
             drawChess();
             return true;
         }
@@ -50,6 +55,8 @@ public class Controller implements Initializable {
     }
 
     private void drawChess () {
+        //TODO: receive msg(chessboard) from the server
+
         for (int i = 0; i < chessBoard.length; i++) {
             for (int j = 0; j < chessBoard[0].length; j++) {
                 if (flag[i][j]) {

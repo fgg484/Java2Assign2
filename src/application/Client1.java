@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.SocketException;
 import java.util.Scanner;
 
-public class Client {
+public class Client1 {
     public static void main(String[] args) throws IOException {
         //1.创建客户端+端口
         DatagramSocket client = new DatagramSocket(6666);
@@ -18,7 +16,7 @@ public class Client {
         String msg = sc.nextLine();
         byte[] data = msg.getBytes();
         //3.打包（发送的地点及端口）
-        DatagramPacket packet = new DatagramPacket(data, data.length,new InetSocketAddress("localhost",7777));
+        DatagramPacket packet = new DatagramPacket(data, data.length,new InetSocketAddress("localhost",8888));
         //4.发送
         client.send(packet);
         //5.释放
