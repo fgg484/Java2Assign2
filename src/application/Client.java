@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class Client {
     public static void main(String[] args) throws IOException {
         //1.创建客户端+端口
-        DatagramSocket client = new DatagramSocket(5555);
+        DatagramSocket client = new DatagramSocket(6666);
         //2.准备数据
         Scanner sc = new Scanner(System.in);
         System.out.println("input send msg:");
