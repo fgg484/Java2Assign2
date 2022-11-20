@@ -8,15 +8,21 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-import java.net.URL;
+import java.io.IOException;
+import java.net.*;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller1 implements Initializable {
     private static final int PLAY_1 = 1;
     private static final int PLAY_2 = 2;
     private static final int EMPTY = 0;
     private static final int BOUND = 90;
     private static final int OFFSET = 15;
+    private DatagramSocket client;
+    private DatagramSocket server;
+    public static String ip = "";
+    private int server_port = 8888;
+    private int client_port = 6666;
 
     @FXML
     private Pane base_square;
@@ -35,10 +41,26 @@ public class Controller implements Initializable {
             int x = (int) (event.getX() / BOUND);
             int y = (int) (event.getY() / BOUND);
             if (refreshBoard(x, y)) {
-                //TODO: receive turn to the server
-
-                TURN = !TURN;//Turn = msg from the server
-                //TODO: send turn to the server
+//                try {
+//                    //1.创建服务端+端口
+//                    DatagramSocket client = new DatagramSocket(client_port);
+//                    //2.准备接受容器
+//                    byte[] container = new byte[1024];
+//                    //3.封装成包
+//                    DatagramPacket packet = new DatagramPacket(container, container.length);
+//                    //4.接受数据
+//                    client.receive(packet);
+//                    //5.分析数据
+//                    byte[] data = packet.getData();
+//                    int len = packet.getLength();
+//                    String message = new String(data, 0, len);
+//                    TURN = message.split(",")[2].equals("false");
+//                    //6.释放
+//                    client.close();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+                TURN = !TURN;
             }
         });
     }
@@ -47,7 +69,18 @@ public class Controller implements Initializable {
         if (chessBoard[x][y] == EMPTY) {
             chessBoard[x][y] = TURN ? PLAY_1 : PLAY_2;
             //TODO: send msg to the server
-
+//            try {
+//                client = new DatagramSocket(client_port);
+//                String msg;
+//                msg = x + "," + y + "," + TURN;
+//                byte[] data = msg.getBytes();
+//                DatagramPacket packet = new DatagramPacket(data, data.length, new InetSocketAddress("localhost", server_port));
+//                client.send(packet);
+////                System.out.println("send2=" + msg);
+//                client.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
             drawChess();
             return true;
         }
@@ -55,8 +88,6 @@ public class Controller implements Initializable {
     }
 
     private void drawChess () {
-        //TODO: receive msg(chessboard) from the server
-
         for (int i = 0; i < chessBoard.length; i++) {
             for (int j = 0; j < chessBoard[0].length; j++) {
                 if (flag[i][j]) {
