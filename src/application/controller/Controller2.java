@@ -9,17 +9,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-import java.io.IOException;
-import java.net.*;
+import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller1 implements Initializable {
+public class Controller2 implements Initializable {
     private static final int PLAY_1 = 1;
     private static final int PLAY_2 = 2;
     private static final int EMPTY = 0;
     private static final int BOUND = 90;
     private static final int OFFSET = 15;
-    private int client_port = 6666;
+    private int client_port = 8888;
     private Client client = new Client(client_port);
 
     @FXML
@@ -37,7 +36,7 @@ public class Controller1 implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if (!TURN) {
             String message = client.receive();
-            TURN = message.split(",")[2].equals("player2");
+            TURN = message.split(",")[2].equals("player1");
         }
         game_panel.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / BOUND);
@@ -50,8 +49,8 @@ public class Controller1 implements Initializable {
 
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
-            chessBoard[x][y] = PLAY_1;
-            client.send(x + "," + y + ",player1");
+            chessBoard[x][y] = PLAY_2;
+            client.send(x + "," + y + ",player2");
             drawChess();
             return true;
         }

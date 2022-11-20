@@ -8,8 +8,8 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket1 = new ServerSocket(1008);//创建绑定到特定端口的服务器Socket。
-            ServerSocket serverSocket2 = new ServerSocket(1009);//创建绑定到特定端口的服务器Socket。
+            ServerSocket serverSocket1 = new ServerSocket(6666);//创建绑定到特定端口的服务器Socket。
+            ServerSocket serverSocket2 = new ServerSocket(8888);//创建绑定到特定端口的服务器Socket。
             Socket socket1 = null;//需要接收的客户端Socket
             Socket socket2 = null;//需要接收的客户端Socket
             int count = 0;//记录客户端数量
