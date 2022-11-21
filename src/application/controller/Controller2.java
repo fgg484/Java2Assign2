@@ -28,7 +28,7 @@ public class Controller2 implements Initializable {
     @FXML
     private Rectangle game_panel;
 
-    private static boolean TURN = true;
+    private static boolean TURN = false;
 
     private static final int[][] chessBoard = new int[3][3];
     private static final boolean[][] flag = new boolean[3][3];
@@ -38,9 +38,19 @@ public class Controller2 implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("az");
         if (!TURN) {
             String message = client.receive();
+            System.out.println(message);
+            int x = message.split(",")[0].charAt(0) - '0';
+            int y = message.split(",")[1].charAt(0) - '0';
             TURN = message.split(",")[2].equals("player1");
+            System.out.println(TURN);
+            if (TURN) {
+                chessBoard[x][y] = PLAY_1;
+                drawChess();
+                System.out.println("我进来了");
+            }
         }
         game_panel.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / BOUND);
@@ -54,7 +64,7 @@ public class Controller2 implements Initializable {
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_2;
-            client.send(x + "," + y + ",player2");
+            client.send(x + "," + y + ",player2\n");
             drawChess();
             return true;
         }

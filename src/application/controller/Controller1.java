@@ -41,7 +41,14 @@ public class Controller1 implements Initializable {
         if (!TURN) {
             String message = client.receive();
             System.out.println(message);
+            int x = message.split(",")[0].charAt(0) - '0';
+            int y = message.split(",")[1].charAt(0) - '0';
             TURN = message.split(",")[2].equals("player2");
+            System.out.println(TURN);
+            if (TURN) {
+                chessBoard[x][y] = PLAY_2;
+                drawChess();
+            }
         }
         game_panel.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / BOUND);
@@ -55,8 +62,8 @@ public class Controller1 implements Initializable {
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_1;
-            client.send(x + "," + y + ",player1");
-            System.out.println("send=" + x + "," + y + ",player1");
+            client.send(x + "," + y + ",player1\n");
+            System.out.println("send: " + x + "," + y + ",player1");
             drawChess();
             return true;
         }
