@@ -33,10 +33,14 @@ public class Controller1 implements Initializable {
     private static final int[][] chessBoard = new int[3][3];
     private static final boolean[][] flag = new boolean[3][3];
 
+    public Controller1() throws IOException {
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (!TURN) {
             String message = client.receive();
+            System.out.println(message);
             TURN = message.split(",")[2].equals("player2");
         }
         game_panel.setOnMouseClicked(event -> {
@@ -52,6 +56,7 @@ public class Controller1 implements Initializable {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_1;
             client.send(x + "," + y + ",player1");
+            System.out.println("send=" + x + "," + y + ",player1");
             drawChess();
             return true;
         }

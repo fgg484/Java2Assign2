@@ -9,6 +9,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,6 +32,9 @@ public class Controller2 implements Initializable {
 
     private static final int[][] chessBoard = new int[3][3];
     private static final boolean[][] flag = new boolean[3][3];
+
+    public Controller2() throws IOException {
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

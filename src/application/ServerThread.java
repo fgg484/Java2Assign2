@@ -42,21 +42,21 @@ public class ServerThread extends Thread {
             writer.write("{'to_client':'" + inetAddress1.getHostAddress() + "','data':'from the server'}");
             writer.flush();//清空缓冲区数据
 
-//            inputStream = socket2.getInputStream();
-//            inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-//            bufferedReader = new BufferedReader(inputStreamReader);
-//            //循环读取客户端信息
-//            while ((info = bufferedReader.readLine()) != null) {
-//                //获取客户端的ip地址及发送数据
-//                System.out.println("服务器端接收：" + "{'from_client':'" + socket2.getInetAddress().getHostAddress() + "','data':'" + info + "'}");
-//            }
-//            socket2.shutdownInput();//关闭输入流
-//
-//            //响应客户端请求
-//            outputStream = socket2.getOutputStream();
-//            writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-//            writer.write("{'to_client':'" + inetAddress2.getHostAddress() + "','data':'我是服务器数据'}");
-//            writer.flush();//清空缓冲区数据
+            inputStream = socket2.getInputStream();
+            inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            //循环读取客户端信息
+            while ((info = bufferedReader.readLine()) != null) {
+                //获取客户端的ip地址及发送数据
+                System.out.println("服务器端接收：" + "{'from_client':'" + socket2.getInetAddress().getHostAddress() + "','data':'" + info + "'}");
+            }
+            socket2.shutdownInput();//关闭输入流
+
+            //响应客户端请求
+            outputStream = socket2.getOutputStream();
+            writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+            writer.write("{'to_client':'" + inetAddress2.getHostAddress() + "','data':'我是服务器数据'}");
+            writer.flush();//清空缓冲区数据
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
