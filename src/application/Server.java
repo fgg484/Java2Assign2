@@ -20,8 +20,10 @@ public class Server {
                 //一局游戏有两个玩家，一个线程
                 socket1 = serverSocket1.accept();//侦听并接受到此套接字的连接
                 InetAddress inetAddress1 = socket1.getInetAddress();//获取客户端的连接
+                socket1.setSoTimeout(500000);
                 socket2 = serverSocket2.accept();//侦听并接受到此套接字的连接
                 InetAddress inetAddress2 = socket2.getInetAddress();//获取客户端的连接
+                socket2.setSoTimeout(500000);
                 ServerThread thread = new ServerThread(socket1, inetAddress1, socket2, inetAddress2);//自己创建的线程类
                 thread.start();//启动线程
                 count += 2;//如果正确建立连接

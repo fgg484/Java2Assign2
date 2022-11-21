@@ -30,10 +30,10 @@ public class ServerThread extends Thread {
             //TODO:
             // 1.接受client发送的消息
             // 2.将消息转发给另一个client
-            boolean flag = true;
-            while (flag) {
+            while (cnt < 9) {
                 cnt++;
-                StringBuilder msg = new StringBuilder();
+                System.out.println(cnt);
+                String msg = "";
                 if (cnt % 2 == 1) {
                     inputStream = socket1.getInputStream();
                     inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -41,41 +41,38 @@ public class ServerThread extends Thread {
                     //循环读取客户端信息
                     while ((info = bufferedReader.readLine()) != null) {
                         //获取客户端的ip地址及发送数据
-                        msg.append(info);
+                        msg += info;
                     }
                     System.out.println("server receives from client1: " + msg);
-                    //socket1.shutdownInput();//关闭输入流
+                    socket1.shutdownInput();//关闭输入流
 
                     //响应客户端请求
                     outputStream = socket2.getOutputStream();
                     writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-                    writer.write(msg + "\n");
+                    writer.write(msg);
                     System.out.println("server sends to client2: " + msg);
                     writer.flush();//清空缓冲区数据
-                }
-                else {
+                } else {
                     inputStream = socket2.getInputStream();
                     inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                     bufferedReader = new BufferedReader(inputStreamReader);
                     //循环读取客户端信息
-                    while ((info = bufferedReader.readLine()) != null) {
-                        //获取客户端的ip地址及发送数据
-                        msg.append(info);
-                    }
+                    msg = bufferedReader.readLine();
                     System.out.println("server receives from client2: " + msg);
-                    //socket1.shutdownInput();//关闭输入流
+                    socket2.shutdownInput();//关闭输入流
 
                     //响应客户端请求
                     outputStream = socket1.getOutputStream();
                     writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-                    writer.write(msg + "\n");
+                    writer.write(msg);
                     System.out.println("server sends to client1: " + msg);
                     writer.flush();//清空缓冲区数据
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             //关闭资源
             try {
                 if (writer != null) {

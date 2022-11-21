@@ -19,7 +19,7 @@ public class Controller1 implements Initializable {
     private static final int EMPTY = 0;
     private static final int BOUND = 90;
     private static final int OFFSET = 15;
-    private int client_port = 6666;
+    private final int client_port = 6666;
     private Client client = new Client(client_port);
 
     @FXML
@@ -27,6 +27,9 @@ public class Controller1 implements Initializable {
 
     @FXML
     private Rectangle game_panel;
+
+    @FXML
+    private Rectangle OK_panel;
 
     private static boolean TURN = true;
 
@@ -38,39 +41,54 @@ public class Controller1 implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (!TURN) {
-            String message = client.receive();
-            System.out.println(message);
-            int x = message.split(",")[0].charAt(0) - '0';
-            int y = message.split(",")[1].charAt(0) - '0';
-            TURN = message.split(",")[2].equals("player2");
-            System.out.println(TURN);
-            if (TURN) {
-                chessBoard[x][y] = PLAY_2;
-                drawChess();
+        game_panel.setVisible(false);
+        OK_panel.setOnMouseClicked(event -> {
+            OK_panel.setHeight(0);
+            game_panel.setVisible(true);
+            if (!TURN) {
+                String message = client.receive();
+                System.out.println(message);
+                int xx = message.split(",")[0].charAt(0) - '0';
+                int yy = message.split(",")[1].charAt(0) - '0';
+                TURN = message.split(",")[2].equals("player2");
+                System.out.println(TURN);
+                if (TURN) {
+                    chessBoard[xx][yy] = PLAY_2;
+                    drawChess();
+                }
             }
-        }
+        });
         game_panel.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / BOUND);
             int y = (int) (event.getY() / BOUND);
             if (refreshBoard(x, y)) {
                 TURN = false;
+//                String message = client.receive();
+//                System.out.println(message);
+//                int xx = message.split(",")[0].charAt(0) - '0';
+//                int yy = message.split(",")[1].charAt(0) - '0';
+//                TURN = message.split(",")[2].equals("player2");
+//                System.out.println(TURN);
+//                if (TURN) {
+//                    chessBoard[xx][yy] = PLAY_2;
+//                    drawChess();
+//                }
             }
         });
     }
 
-    private boolean refreshBoard (int x, int y) {
+    private boolean refreshBoard(int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_1;
-            client.send(x + "," + y + ",player1\n");
-            System.out.println("send: " + x + "," + y + ",player1");
             drawChess();
+            client.send(x + "," + y + ",player1");
+            System.out.println("send: " + x + "," + y + ",player1");
             return true;
         }
         return false;
     }
 
-    private void drawChess () {
+    private void drawChess() {
         for (int i = 0; i < chessBoard.length; i++) {
             for (int j = 0; j < chessBoard[0].length; j++) {
                 if (flag[i][j]) {
@@ -94,7 +112,7 @@ public class Controller1 implements Initializable {
         }
     }
 
-    private void drawCircle (int i, int j) {
+    private void drawCircle(int i, int j) {
         Circle circle = new Circle();
         base_square.getChildren().add(circle);
         circle.setCenterX(i * BOUND + BOUND / 2.0 + OFFSET);
@@ -105,7 +123,7 @@ public class Controller1 implements Initializable {
         flag[i][j] = true;
     }
 
-    private void drawLine (int i, int j) {
+    private void drawLine(int i, int j) {
         Line line_a = new Line();
         Line line_b = new Line();
         base_square.getChildren().add(line_a);

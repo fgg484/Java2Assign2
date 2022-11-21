@@ -14,7 +14,7 @@ public class Player1 extends Application {
 
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("mainUI1.fxml"));
             Pane root = fxmlLoader.load();
-            primaryStage.setTitle("Tic Tac Toe");
+            primaryStage.setTitle("Player1");
             primaryStage.setScene(new Scene(root));
             primaryStage.setResizable(false);
             primaryStage.show();

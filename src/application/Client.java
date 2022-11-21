@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class Client {
     private final int port;
-//    private Socket socket;
+    private Socket socket;
     public Client(int num) throws IOException {
         this.port = num;
 //        this.socket = new Socket("localhost", num);
@@ -16,11 +16,11 @@ public class Client {
             Socket socket = new Socket("localhost", port);
             OutputStream outputStream = socket.getOutputStream();//得到一个输出流，用于向服务器发送数据
             OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);//将写入的字符编码成字节后写入一个字节流
-            System.out.println(msg);
+//            System.out.println(msg);
             writer.write(msg);
             writer.flush();//刷新缓冲
             socket.shutdownOutput();//只关闭输出流而不关闭连接
-
+            System.out.println("have sent " + msg);
             //关闭资源
             writer.close();
             outputStream.close();
@@ -40,7 +40,10 @@ public class Client {
             String info;
             System.out.println("客户端IP地址:" + socket.getInetAddress().getHostAddress());
             //输出服务器端响应数据
-            msg = bufferedReader.readLine();
+            while((info = bufferedReader.readLine())!=null){
+                System.out.println("have received " + info);
+                msg += info;
+            }
             //关闭资源
             bufferedReader.close();
             inputStreamReader.close();
