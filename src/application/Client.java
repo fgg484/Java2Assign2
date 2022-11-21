@@ -15,7 +15,6 @@ public class Client {
     public void send(String msg) {
         try {
             Socket socket = new Socket("localhost", port);
-            socket.setSoTimeout(500000);
             OutputStream outputStream = socket.getOutputStream();//得到一个输出流，用于向服务器发送数据
             OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);//将写入的字符编码成字节后写入一个字节流
             System.out.println("sent " + msg);
@@ -36,7 +35,6 @@ public class Client {
         String msg = "";
         try {
             Socket socket = new Socket("localhost", port);
-            socket.setSoTimeout(500000);
             InputStream inputStream = socket.getInputStream();//得到一个输入流，用于接收服务器响应的数据
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);//将一个字节流中的字节解码成字符
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);//为输入流添加缓冲

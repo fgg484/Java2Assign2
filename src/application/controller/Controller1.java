@@ -50,7 +50,7 @@ public class Controller1 implements Initializable {
             int x = message.split(",")[0].charAt(0) - '0';
             int y = message.split(",")[1].charAt(0) - '0';
             TURN = message.split(",")[2].equals("player2");
-            System.out.println(TURN);
+//            System.out.println(TURN);
             if (TURN) {
                 chessBoard[x][y] = PLAY_2;
                 drawChess();
@@ -65,7 +65,7 @@ public class Controller1 implements Initializable {
             }
         });
         EventHandler<ActionEvent> eventHandler = e -> {
-            drawChess();
+            drawChess();//实时更新chess
         };
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(10), eventHandler));
         animation.setCycleCount(Timeline.INDEFINITE);
