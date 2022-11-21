@@ -1,6 +1,10 @@
 package application.controller;
 
 import application.Client;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
@@ -8,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,7 +43,7 @@ public class Controller2 implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("az");
+        client.send("Player2 is ready");
         if (!TURN) {
             String message = client.receive();
             System.out.println(message);
@@ -57,21 +62,39 @@ public class Controller2 implements Initializable {
             int y = (int) (event.getY() / BOUND);
             if (refreshBoard(x, y)) {
                 TURN = false;
+                drawChess();
             }
         });
+        EventHandler<ActionEvent> eventHandler = e -> {
+            drawChess();
+        };
+        Timeline animation = new Timeline(new KeyFrame(Duration.millis(10), eventHandler));
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.play();
     }
 
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_2;
-            client.send(x + "," + y + ",player2\n");
-            drawChess();
+            client.send(x + "," + y + ",player2");
+            new Thread(() -> {
+                String message = client.receive();
+                System.out.println(message);
+                int xx = message.split(",")[0].charAt(0) - '0';
+                int yy = message.split(",")[1].charAt(0) - '0';
+                TURN = message.split(",")[2].equals("player1");
+                System.out.println(TURN);
+                if (TURN) {
+                    chessBoard[xx][yy] = PLAY_1;
+                }
+            }).start();
+//            drawChess();
             return true;
         }
         return false;
     }
 
-    private void drawChess () {
+    public void drawChess () {
         for (int i = 0; i < chessBoard.length; i++) {
             for (int j = 0; j < chessBoard[0].length; j++) {
                 if (flag[i][j]) {

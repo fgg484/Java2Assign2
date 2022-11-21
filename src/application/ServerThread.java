@@ -11,11 +11,12 @@ public class ServerThread extends Thread {
     InetAddress inetAddress1;//接收客户端的连接
     Socket socket2;
     InetAddress inetAddress2;//接收客户端的连接
-    public ServerThread(Socket socket1, InetAddress inetAddress1, Socket socket2, InetAddress inetAddress2) {
+    public ServerThread(Socket socket1, InetAddress inetAddress1, Socket socket2, InetAddress inetAddress2, int cnt) {
         this.socket1 = socket1;
         this.inetAddress1 = inetAddress1;
         this.socket2 = socket2;
         this.inetAddress2 = inetAddress2;
+        this.cnt = cnt;
     }
 
     @Override
@@ -31,8 +32,7 @@ public class ServerThread extends Thread {
             // 1.接受client发送的消息
             // 2.将消息转发给另一个client
             boolean flag = true;
-            while (flag) {
-                cnt++;
+                System.out.println("cnt=" + cnt);
                 StringBuilder msg = new StringBuilder();
                 if (cnt % 2 == 1) {
                     inputStream = socket1.getInputStream();
@@ -44,7 +44,15 @@ public class ServerThread extends Thread {
                         msg.append(info);
                     }
                     System.out.println("server receives from client1: " + msg);
-                    //socket1.shutdownInput();//关闭输入流
+                    socket1.shutdownInput();//关闭输入流
+
+                    //响应客户端请求
+                    outputStream = socket1.getOutputStream();
+                    writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+                    writer.write(msg + "\n");
+                    System.out.println("server sends to client1: " + msg);
+                    writer.flush();//清空缓冲区数据
+                    socket1.shutdownOutput();
 
                     //响应客户端请求
                     outputStream = socket2.getOutputStream();
@@ -52,6 +60,7 @@ public class ServerThread extends Thread {
                     writer.write(msg + "\n");
                     System.out.println("server sends to client2: " + msg);
                     writer.flush();//清空缓冲区数据
+                    socket2.shutdownOutput();
                 }
                 else {
                     inputStream = socket2.getInputStream();
@@ -63,7 +72,15 @@ public class ServerThread extends Thread {
                         msg.append(info);
                     }
                     System.out.println("server receives from client2: " + msg);
-                    //socket1.shutdownInput();//关闭输入流
+                    socket2.shutdownInput();//关闭输入流
+
+                    //响应客户端请求
+                    outputStream = socket2.getOutputStream();
+                    writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+                    writer.write(msg + "\n");
+                    System.out.println("server sends to client2: " + msg);
+                    writer.flush();//清空缓冲区数据
+                    socket2.shutdownOutput();
 
                     //响应客户端请求
                     outputStream = socket1.getOutputStream();
@@ -71,8 +88,8 @@ public class ServerThread extends Thread {
                     writer.write(msg + "\n");
                     System.out.println("server sends to client1: " + msg);
                     writer.flush();//清空缓冲区数据
+                    socket1.shutdownOutput();
                 }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
