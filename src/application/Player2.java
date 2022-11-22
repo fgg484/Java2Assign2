@@ -23,7 +23,6 @@ public class Player2 extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader();
 
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("mainUI2.fxml"));
-            Controller2 controller2 = fxmlLoader.getController();
             Pane root = fxmlLoader.load();
             primaryStage.setTitle("Player2");
             primaryStage.setScene(new Scene(root));

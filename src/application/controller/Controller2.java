@@ -3,10 +3,12 @@ package application.controller;
 import application.Client;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -15,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,8 +27,10 @@ public class Controller2 implements Initializable {
     private static final int EMPTY = 0;
     private static final int BOUND = 90;
     private static final int OFFSET = 15;
+    public Button OK_Button;
     private int client_port = 8888;
-    private Client client = new Client(client_port);
+    Socket socket = new Socket("localhost", client_port);
+    private Client client = new Client(socket);
 
     @FXML
     private Pane base_square;
@@ -34,6 +39,7 @@ public class Controller2 implements Initializable {
     private Rectangle game_panel;
 
     private static boolean TURN = false;
+    private static boolean begin = true;
 
     private static final int[][] chessBoard = new int[3][3];
     private static final boolean[][] flag = new boolean[3][3];
@@ -43,20 +49,7 @@ public class Controller2 implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        client.send("Player2 is ready");
-        if (!TURN) {
-            String message = client.receive();
-            System.out.println(message);
-            int x = message.split(",")[0].charAt(0) - '0';
-            int y = message.split(",")[1].charAt(0) - '0';
-            TURN = message.split(",")[2].equals("player1");
-            System.out.println(TURN);
-            if (TURN) {
-                chessBoard[x][y] = PLAY_1;
-                drawChess();
-                System.out.println("我进来了");
-            }
-        }
+        client.send("Player2 is ready\n");
         game_panel.setOnMouseClicked(event -> {
             int x = (int) (event.getX() / BOUND);
             int y = (int) (event.getY() / BOUND);
@@ -64,6 +57,30 @@ public class Controller2 implements Initializable {
                 TURN = false;
                 drawChess();
             }
+        });
+        OK_Button.setOnMouseClicked(event -> {
+            OK_Button.setVisible(false);
+            OK_Button.setManaged(false);
+            if (!TURN && begin) {
+                begin = false;
+                new Thread(() -> {
+                    String message = client.receive();
+//                    System.out.println(message);
+                    if (message.equals("End Because Of Exception")) {
+                        Platform.exit();
+//                        System.out.println(message);
+                        message = "0,0,shutdown";
+                    }
+                    int xx = message.split(",")[0].charAt(0) - '0';
+                    int yy = message.split(",")[1].charAt(0) - '0';
+                    TURN = message.split(",")[2].equals("player1");
+//                    System.out.println(TURN);
+                    if (TURN) {
+                        chessBoard[xx][yy] = PLAY_1;
+                    }
+                }).start();
+            }
+            drawChess();
         });
         EventHandler<ActionEvent> eventHandler = e -> {
             drawChess();
@@ -76,14 +93,19 @@ public class Controller2 implements Initializable {
     private boolean refreshBoard (int x, int y) {
         if (chessBoard[x][y] == EMPTY && TURN) {
             chessBoard[x][y] = PLAY_2;
-            client.send(x + "," + y + ",player2");
+            client.send(x + "," + y + ",player2\n");
             new Thread(() -> {
                 String message = client.receive();
-                System.out.println(message);
+//                System.out.println(message);
+                if (message.equals("End Because Of Exception")) {
+//                    System.out.println(message);
+                    Platform.exit();
+                    message = "0,0,shutdown";
+                }
                 int xx = message.split(",")[0].charAt(0) - '0';
                 int yy = message.split(",")[1].charAt(0) - '0';
                 TURN = message.split(",")[2].equals("player1");
-                System.out.println(TURN);
+//                System.out.println(TURN);
                 if (TURN) {
                     chessBoard[xx][yy] = PLAY_1;
                 }

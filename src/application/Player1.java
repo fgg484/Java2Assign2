@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.text.DateFormat;
@@ -24,7 +26,7 @@ public class Player1 extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader();
 
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("mainUI1.fxml"));
-            Controller1 controller1 = fxmlLoader.getController();
+
             Pane root = fxmlLoader.load();
             primaryStage.setTitle("Player1");
             primaryStage.setScene(new Scene(root));
