@@ -21,7 +21,7 @@ public class Client {
             socket.setSoTimeout(500000);
             OutputStream outputStream = socket.getOutputStream();//得到一个输出流，用于向服务器发送数据
             OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);//将写入的字符编码成字节后写入一个字节流
-            System.out.println("sent " + msg);
+//            System.out.println("sent " + msg);
             writer.write(msg + "\n");
             writer.flush();//刷新缓冲
 //            socket.shutdownOutput();//只关闭输出流而不关闭连接
@@ -55,7 +55,7 @@ public class Client {
 //            System.out.println(bufferedReader.readLine());
             while ((info = bufferedReader.readLine()) != null) {
 //                System.out.println(2);
-                System.out.println("have recevied: " + info);
+//                System.out.println("have recevied: " + info);
                 msg = info;
                 if (msg.length() > 0) {
                     break;

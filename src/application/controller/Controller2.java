@@ -84,6 +84,18 @@ public class Controller2 implements Initializable {
         });
         EventHandler<ActionEvent> eventHandler = e -> {
             drawChess();
+            if (win() && !lose()) {
+                System.out.println("You won the game!");
+                System.exit(0);
+            }
+            else if (!win() && lose()) {
+                System.out.println("You lost the game!");
+                System.exit(0);
+            }
+            else if (!win() && !lose() && full() ) {
+                System.out.println("The game is a draw.");
+                System.exit(0);
+            }
         };
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(10), eventHandler));
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -114,6 +126,116 @@ public class Controller2 implements Initializable {
             return true;
         }
         return false;
+    }
+
+    private boolean lose() {
+        boolean flag = true;
+        int[] h = {0, 1, 2};
+        for (int i = 0; i < 3; i++) {
+            flag = true;
+            for (int j = 0; j < 3; j++) {
+                if (chessBoard[i][h[j]] == PLAY_2 || chessBoard[i][h[j]] == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return flag;
+            }
+        }//横
+        for (int i = 0; i < 3; i++) {
+            flag = true;
+            for (int j = 0; j < 3; j++) {
+                if (chessBoard[h[j]][i] == PLAY_2 || chessBoard[h[j]][i] == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return flag;
+            }
+        }//竖
+        flag = true;
+        for (int i = 0; i < 3; i++) {
+            if (chessBoard[i][i] == PLAY_2 || chessBoard[i][i] == EMPTY) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return flag;
+        }//正对角线
+        flag = true;
+        for (int i = 0; i < 3; i++) {
+            if (chessBoard[i][2 - i] == PLAY_2 || chessBoard[i][2 - i] == EMPTY) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return flag;
+        }//反对角线
+
+        return false;
+    }
+
+    private boolean win() {
+        boolean flag = true;
+        int[] h = {0, 1, 2};
+        for (int i = 0; i < 3; i++) {
+            flag = true;
+            for (int j = 0; j < 3; j++) {
+                if (chessBoard[i][h[j]] == PLAY_1 || chessBoard[i][h[j]] == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return flag;
+            }
+        }//横
+        for (int i = 0; i < 3; i++) {
+            flag = true;
+            for (int j = 0; j < 3; j++) {
+                if (chessBoard[h[j]][i] == PLAY_1 || chessBoard[h[j]][i] == EMPTY) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return flag;
+            }
+        }//竖
+        flag = true;
+        for (int i = 0; i < 3; i++) {
+            if (chessBoard[i][i] == PLAY_1 || chessBoard[i][i] == EMPTY) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return flag;
+        }//正对角线
+        flag = true;
+        for (int i = 0; i < 3; i++) {
+            if (chessBoard[i][2 - i] == PLAY_1 || chessBoard[i][2 - i] == EMPTY) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return flag;
+        }//反对角线
+
+        return false;
+    }
+
+    private boolean full() {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                if (chessBoard[i][j] == EMPTY)
+                    return false;
+        return true;
     }
 
     public void drawChess () {

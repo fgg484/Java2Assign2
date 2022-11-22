@@ -21,6 +21,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
+        boolean flag = true;
         while (true) {
             InputStream inputStream = null;//字节输入流
             InputStreamReader inputStreamReader = null;//将一个字节流中的字节解码成字符
@@ -77,23 +78,36 @@ public class ServerThread extends Thread {
                         continue;
                     }
                     System.out.println("server receives from client1: " + msg);
-//                    socket1.shutdownInput();//关闭输入流
 
-//                    //响应客户端请求
-//                    outputStream = socket1.getOutputStream();
-//                    writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-//                    writer.write(msg + "\n");
-//                    System.out.println("server sends to client1: " + msg);
-//                    writer.flush();//清空缓冲区数据
-////                socket1.shutdownOutput();
-
-                    //响应客户端请求
-                    outputStream = socket2.getOutputStream();
-                    writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-                    writer.write(msg + "\n");
-                    System.out.println("server sends to client2: " + msg);
-                    writer.flush();//清空缓冲区数据
+                    String[] message = msg.split(",");
+                    if (message.length == 4) {
+                        String win_msg;
+                        inputStream = socket1.getInputStream();
+                        inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                        bufferedReader = new BufferedReader(inputStreamReader);
+                        win_msg = bufferedReader.readLine();
+//                        socket1.shutdownInput();//关闭输入流
+                        System.out.println(win_msg);
+                        if (win_msg.equals("Player1 win")) {
+                            System.out.println("Player2 lose");
+                        } else if (win_msg.equals("Player1 lose")) {
+                            System.out.println("Player2 win");
+                        }
+                        outputStream = socket2.getOutputStream();
+                        writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+                        writer.write(msg + "\n");
+                        writer.flush();//清空缓冲区数据
+                        flag = false;
+                        break;
+                    } else {
+                        //响应客户端请求
+                        outputStream = socket2.getOutputStream();
+                        writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+                        writer.write(msg + "\n");
+                        System.out.println("server sends to client2: " + msg);
+                        writer.flush();//清空缓冲区数据
 //                socket2.shutdownOutput();
+                    }
                 } else {
                     inputStream = socket2.getInputStream();
                     inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -129,7 +143,7 @@ public class ServerThread extends Thread {
                 cnt++;
             } catch (IOException e) {
 //                e.printStackTrace();
-                if (e.getMessage().equals("Connection reset")) {
+                if (e.getMessage().equals("Connection reset") && flag) {
                     System.out.println("Error: Clients stop!");
                     if (socket1 != null) {
                         try {
