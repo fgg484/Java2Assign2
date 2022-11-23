@@ -123,12 +123,14 @@ public class Controller1 implements Initializable {
 //                    System.out.println(message);
                     message = "0,0,shutdown";
                 }
-                int xx = message.split(",")[0].charAt(0) - '0';
-                int yy = message.split(",")[1].charAt(0) - '0';
-                TURN = message.split(",")[2].equals("player2");
+                if (message.split(",").length > 2) {
+                    int xx = message.split(",")[0].charAt(0) - '0';
+                    int yy = message.split(",")[1].charAt(0) - '0';
+                    TURN = message.split(",")[2].equals("player2");
 //                System.out.println(TURN);
-                if (TURN) {
-                    chessBoard[xx][yy] = PLAY_2;
+                    if (TURN) {
+                        chessBoard[xx][yy] = PLAY_2;
+                    }
                 }
             }).start();
 //            drawChess();

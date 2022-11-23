@@ -144,7 +144,7 @@ public class ServerThread extends Thread {
             } catch (IOException e) {
 //                e.printStackTrace();
                 if (e.getMessage().equals("Connection reset") && flag) {
-                    System.out.println("Error: Clients stop!");
+                    System.out.println("Clients stop!");
                     if (socket1 != null) {
                         try {
                             outputStream = socket1.getOutputStream();

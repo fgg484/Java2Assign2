@@ -114,12 +114,14 @@ public class Controller2 implements Initializable {
                     Platform.exit();
                     message = "0,0,shutdown";
                 }
-                int xx = message.split(",")[0].charAt(0) - '0';
-                int yy = message.split(",")[1].charAt(0) - '0';
-                TURN = message.split(",")[2].equals("player1");
+                if (message.split(",").length > 2) {
+                    int xx = message.split(",")[0].charAt(0) - '0';
+                    int yy = message.split(",")[1].charAt(0) - '0';
+                    TURN = message.split(",")[2].equals("player1");
 //                System.out.println(TURN);
-                if (TURN) {
-                    chessBoard[xx][yy] = PLAY_1;
+                    if (TURN) {
+                        chessBoard[xx][yy] = PLAY_1;
+                    }
                 }
             }).start();
 //            drawChess();
