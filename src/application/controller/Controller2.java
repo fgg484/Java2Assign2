@@ -28,24 +28,25 @@ public class Controller2 implements Initializable {
   private static final int BOUND = 90;
   private static final int OFFSET = 15;
   public Button OK_Button;
+
   private int client_port = 8888;
-    Socket socket = new Socket("localhost", client_port);
-    private Client client = new Client(socket);
+  Socket socket = new Socket("localhost", client_port);
+  private Client client = new Client(socket);
 
-    @FXML
-    private Pane base_square;
+  @FXML
+  private Pane base_square;
 
-    @FXML
-    private Rectangle game_panel;
+  @FXML
+  private Rectangle game_panel;
 
-    private static boolean TURN = false;
-    private static boolean begin = true;
+  private static boolean TURN = false;
+  private static boolean begin = true;
 
-    private static final int[][] chessBoard = new int[3][3];
-    private static final boolean[][] flag = new boolean[3][3];
+  private static final int[][] chessBoard = new int[3][3];
+  private static final boolean[][] flag = new boolean[3][3];
 
-    public Controller2() throws IOException {
-    }
+  public Controller2() throws IOException {
+  }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
