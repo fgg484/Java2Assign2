@@ -22,13 +22,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller2 implements Initializable {
-    private static final int PLAY_1 = 1;
-    private static final int PLAY_2 = 2;
-    private static final int EMPTY = 0;
-    private static final int BOUND = 90;
-    private static final int OFFSET = 15;
-    public Button OK_Button;
-    private int client_port = 8888;
+  private static final int PLAY_1 = 1;
+  private static final int PLAY_2 = 2;
+  private static final int EMPTY = 0;
+  private static final int BOUND = 90;
+  private static final int OFFSET = 15;
+  public Button OK_Button;
+  private int client_port = 8888;
     Socket socket = new Socket("localhost", client_port);
     private Client client = new Client(socket);
 
